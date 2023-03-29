@@ -35,6 +35,8 @@ hooks:
     plugs:
       - network
       - network-bind
+  configure:
+    plugs: [empty] # placeholder to allow configuration keys
 
 apps:
   mysql:
