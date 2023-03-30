@@ -36,7 +36,8 @@ hooks:
       - network
       - network-bind
   configure:
-    plugs: [network]
+    plugs:
+      - network
 
 apps:
   mysql:
