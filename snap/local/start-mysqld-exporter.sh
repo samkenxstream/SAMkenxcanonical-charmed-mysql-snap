@@ -4,21 +4,20 @@ USER="$(snapctl get exporter.user)"
 PASSWORD="$(snapctl get exporter.password)"
 SOCKET="$SNAP_COMMON/var/run/mysqld/mysqld.sock"
 
-DATA_SOURCE_NAME="${USER}:${PASSWORD}@unix('${SOCKET}')"
-
 # For security measures, daemons should not be run as sudo.
 # Execute mysqlrouter as the non-sudo user: snap-daemon.
-exec $SNAP/usr/bin/setpriv \
+$SNAP/usr/bin/setpriv \
     --clear-groups \
     --reuid snap_daemon \
     --regid snap_daemon -- \
+    env DATA_SOURCE_NAME="${USER}:${PASSWORD}@unix('${SOCKET}')" \
     "$SNAP/bin/mysqld_exporter" \
-        --collect.auto_increment.columns=false \
-        --collect.info_schema.tables=false \
-        --collect.info_schema.tablestats=false \
-        --collect.perf_schema.indexiowaits=false \
-        --collect.perf_schema.tableiowaits=false \
-        --collect.perf_schema.tablelocks=false \
-        --collect.info_schema.userstats=false \
-        --collect.binlog_size=false \
-        --collect.info_schema.processlist=false
+        --no-collect.auto_increment.columns \
+        --no-collect.info_schema.tables \
+        --no-collect.info_schema.tablestats \
+        --no-collect.perf_schema.indexiowaits \
+        --no-collect.perf_schema.tableiowaits \
+        --no-collect.perf_schema.tablelocks \
+        --no-collect.info_schema.userstats \
+        --no-collect.binlog_size \
+        --no-collect.info_schema.processlist
