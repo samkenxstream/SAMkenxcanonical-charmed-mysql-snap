@@ -6,7 +6,7 @@ SOCKET="$SNAP_COMMON/var/run/mysqld/mysqld.sock"
 
 # For security measures, daemons should not be run as sudo.
 # Execute mysqlrouter as the non-sudo user: snap-daemon.
-$SNAP/usr/bin/setpriv \
+exec $SNAP/usr/bin/setpriv \
     --clear-groups \
     --reuid snap_daemon \
     --regid snap_daemon -- \
