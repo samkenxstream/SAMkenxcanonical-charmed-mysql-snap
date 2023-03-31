@@ -18,9 +18,11 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: snap-artifact
+      - id: get-snap-name
+        run: echo "SNAP_FILE=$(ls *.snap)" >> $GITHUB_OUTPUT
       - uses: snapcore/action-publish@v1
         env:
           SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
         with:
-          snap: charmed-*_*_amd64.snap
+          snap: ${{ steps.get-snap-name.outputs.SNAP_FILE }}
           release: ${{ github.ref_name }}
