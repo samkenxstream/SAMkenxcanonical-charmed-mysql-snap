@@ -174,8 +174,10 @@ parts:
     source: snap/local
   mysqld-exporter:
     plugin: dump
+    # yamllint disable-line rule:line-length
     source: https://github.com/prometheus/mysqld_exporter/releases/download/v0.14.0/mysqld_exporter-0.14.0.linux-amd64.tar.gz
     source-type: tar
+    # yamllint disable-line rule:line-length
     source-checksum: c17402137a4e9745f593127f162c1003298910cb8aa7d05bee3384738de094ae/sha256
     organize:
       'mysqld_exporter': usr/bin/mysqld_exporter
