@@ -32,9 +32,6 @@ echo "mysqlx_socket = $VAR_RUN/mysqlx.sock" >> $MYSQLD_CONFIG
 
 $SNAP/usr/sbin/mysqld --initialize --datadir=$VAR_LIB --user=root
 
-# Add default client config for exporter
-sed -i '32s/^/\n[client]\nuser = exporter\npassword = exporterpasswd\nport = 3306\nhost = localhost\n\n/' $MYSQL_CONFIG
-
 # Change ownership of snap directories to allow snap_daemon to read/write
 chown -R 584788:root $SNAP_DATA/*
 chown -R 584788:root $SNAP_COMMON/*
