@@ -19,23 +19,18 @@ def test_all_apps():
     with open("snap/snapcraft.yaml") as file:
         snapcraft = yaml.safe_load(file)
 
-        override = {}
+        override = {
+            "mysqlrouter": "--version",
+            "xtrabackup": "--version",
+        }
 
-        skip = [
-            "mysqladmin",
-            "mysql-tzinfo-to-sql",
-            "mysqlrouter",
-            "mysqlrouter-passwd",
-            "mysqlrouter-keyring",
-            "mysqlrouter-plugin-info",
-            "xtrabackup",
-        ]
+        sudo = ["mysqlrouter"]
 
         for app, data in snapcraft["apps"].items():
-            if not bool(data.get("daemon")) and app not in skip:
+            if not bool(data.get("daemon")):
                 print(f"Testing {snapcraft['name']}.{app}....")
                 subprocess.run(
-                    f"{snapcraft['name']}.{app} {override.get(app, '--help')}".split(),
+                    f"{'sudo' if app in sudo else ''} {snapcraft['name']}.{app} {override.get(app, '--help')}".split(),
                     check=True,
                 )
 
@@ -45,7 +40,7 @@ def test_all_services():
     with open("snap/snapcraft.yaml") as file:
         snapcraft = yaml.safe_load(file)
 
-        skip = []
+        skip = ["mysqlrouter-service", "mysqld-exporter"]
 
         for app, data in snapcraft["apps"].items():
             if bool(data.get("daemon")) and app not in skip:
@@ -58,7 +53,8 @@ def test_all_services():
                     f"snap services {snapcraft['name']}.{app}".split(),
                     check=True,
                     capture_output=True,
+                    encoding="utf-8",
                 )
                 subprocess.run(f"sudo snap stop {snapcraft['name']}.{app}".split())
 
-                assert "active" in str(service.stdout)
+                assert "active" == service.stdout.split("\n")[1].split()[2]

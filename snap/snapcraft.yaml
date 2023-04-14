@@ -16,36 +16,33 @@ system-usernames:
 
 package-repositories:
   - type: apt
-    components: [mysql-8.0]
-    suites: [jammy]
+    components:
+      - mysql-8.0
+      - mysql-tools
+    suites:
+      - jammy
     key-id: 859BE8D7C586F538430B19C2467B942D3A79BD29
     url: http://repo.mysql.com/apt/ubuntu/
   - type: apt
-    components: [mysql-tools]
-    suites: [jammy]
-    key-id: 859BE8D7C586F538430B19C2467B942D3A79BD29
-    url: http://repo.mysql.com/apt/ubuntu/
-  - type: apt
-    components: [main]
-    suites: [jammy]
+    components:
+      - main
+    suites:
+      - jammy
     key-id: 4D1BB29D63D98E422B2113B19334A25F8507EFA5
     url: http://repo.percona.com/percona/apt
 
 layout:
   /var/lib/mysql-files:
-    bind: $SNAP_DATA/var/lib/mysql-files
-  /var/lib/mysql:
-    bind: $SNAP_DATA/var/lib/mysql
-  /var/log/mysql:
-    bind: $SNAP_DATA/var/log/mysql
-  /etc/mysql:
-    bind: $SNAP_COMMON/mysql
-  /var/mysqld:
-    bind: $SNAP_DATA/var/run/mysqld
-  /usr/lib/mysql-router:
-    symlink: $SNAP/usr/lib/mysql-router
+    bind: $SNAP_COMMON/var/lib/mysql-files
+  /usr/lib/mysqlrouter:
+    symlink: $SNAP/usr/lib/mysqlrouter
   /etc/mysqlrouter:
-    symlink: $SNAP_COMMON
+    bind: $SNAP_DATA/etc/mysqlrouter
+  /var/lib/mysqlrouter:
+    bind: $SNAP_COMMON/var/lib/mysqlrouter
+  /var/log/mysqlrouter:
+    bind: $SNAP_COMMON/var/log/mysqlrouter
+
 
 hooks:
   install:
@@ -68,16 +65,6 @@ apps:
     command: usr/bin/mysql
     plugs:
       - network
-  mysql-config-editor:
-    command: usr/bin/mysql_config_editor
-  mysqldump:
-    command: usr/bin/mysqldump
-  mysqlpump:
-    command: usr/bin/mysqlpump
-  mysqlslap:
-    command: usr/bin/mysqlslap
-  mysqladmin:
-    command: usr/bin/mysqladmin
   mysqld:
     command: start-mysqld.sh
     daemon: simple
@@ -85,32 +72,12 @@ apps:
     plugs:
       - network
       - network-bind
-  mysqldumpslow:
-    command: usr/bin/mysqldumpslow
-  mysql-ssl-rsa-setup:
-    command: usr/bin/mysql_ssl_rsa_setup
-  mysqlimport:
-    command: usr/bin/mysqlimport
-  mysql-tzinfo-to-sql:
-    command: usr/bin/mysql_tzinfo_to_sql
-  mysqlbinlog:
-    command: usr/bin/mysqlbinlog
-  mysql-migrate-keyring:
-    command: usr/bin/mysql_migrate_keyring
-  mysql-secure-installation:
-    command: usr/bin/mysql_secure_installation
-  mysql-upgrade:
-    command: usr/bin/mysql_upgrade
-  mysqlcheck:
-    command: usr/bin/mysqlcheck
-  mysqlshow:
-    command: usr/bin/mysqlshow
   mysqlsh:
     command: usr/bin/mysqlsh
     plugs:
       - network
   mysqlrouter:
-    command: start-mysql-router.sh
+    command: run-mysql-router.sh
   mysqlrouter-service:
     command: start-mysql-router.sh
     daemon: simple
@@ -118,42 +85,14 @@ apps:
     plugs:
       - network
       - network-bind
-  mysqlrouter-passwd:
-    command: usr/bin/mysqlrouter_passwd
-  mysqlrouter-keyring:
-    command: usr/bin/mysqlrouter_keyring
-  mysqlrouter-plugin-info:
-    command: usr/bin/mysqlrouter_plugin_info
   xtrabackup:
     command: usr/bin/xtrabackup
-    plugs:
-      - network
-      - removable-media
-      - home
   xbcloud:
     command: usr/bin/xbcloud
     plugs:
       - network
-      - removable-media
-      - home
-  xbcloud-osenv:
-    command: usr/bin/xbcloud_osenv
-    plugs:
-      - network
-      - removable-media
-      - home
-  xbcrypt:
-    command: usr/bin/xbcrypt
-    plugs:
-      - network
-      - removable-media
-      - home
   xbstream:
     command: usr/bin/xbstream
-    plugs:
-      - network
-      - removable-media
-      - home
   mysqld-exporter:
     command: start-mysqld-exporter.sh
     daemon: simple
