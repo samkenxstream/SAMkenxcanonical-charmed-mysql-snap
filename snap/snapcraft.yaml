@@ -78,6 +78,8 @@ apps:
       - network
   mysqlrouter:
     command: run-mysql-router.sh
+    plugs:
+      - network
   mysqlrouter-service:
     command: start-mysql-router.sh
     daemon: simple
