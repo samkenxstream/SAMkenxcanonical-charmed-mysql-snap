@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# While daemons must be run as non-sudo user, mysqlrouter --bootstrap needs to be
-# run as root as it requires setegid privileges
-exec $SNAP/usr/bin/setpriv --clear-groups --reuid root \
+# For security measures, applications should not be run as sudo. Execute mysqlrouter as the non-sudo user: snap-daemon.
+exec $SNAP/usr/bin/setpriv --clear-groups --reuid snap_daemon \
   --regid root -- $SNAP/usr/bin/mysqlrouter "$@"
