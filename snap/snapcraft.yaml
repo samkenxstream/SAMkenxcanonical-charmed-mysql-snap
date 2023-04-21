@@ -100,6 +100,7 @@ apps:
 parts:
   package-mysql-shell:
     plugin: dump
+    # yamllint disable-line rule:line-length
     source: https://downloads.mysql.com/archives/get/p/43/file/mysql-shell-8.0.32-linux-glibc2.12-x86-64bit.tar.gz
     organize:
       bin: usr/bin
