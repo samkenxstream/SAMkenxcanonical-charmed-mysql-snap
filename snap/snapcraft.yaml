@@ -17,14 +17,6 @@ system-usernames:
 package-repositories:
   - type: apt
     components:
-      - mysql-8.0
-      - mysql-tools
-    suites:
-      - jammy
-    key-id: 859BE8D7C586F538430B19C2467B942D3A79BD29
-    url: http://repo.mysql.com/apt/ubuntu/
-  - type: apt
-    components:
       - main
     suites:
       - jammy
@@ -36,12 +28,16 @@ layout:
     bind: $SNAP_COMMON/var/lib/mysql-files
   /usr/lib/mysqlrouter:
     symlink: $SNAP/usr/lib/mysqlrouter
+  /usr/lib/mysql-router:
+    symlink: $SNAP/usr/lib/mysql-router
   /etc/mysqlrouter:
     bind: $SNAP_DATA/etc/mysqlrouter
   /var/lib/mysqlrouter:
     bind: $SNAP_COMMON/var/lib/mysqlrouter
   /var/log/mysqlrouter:
     bind: $SNAP_COMMON/var/log/mysqlrouter
+  /usr/lib/mysqlsh:
+    bind: $SNAP/lib/mysqlsh
 
 
 hooks:
@@ -102,12 +98,19 @@ apps:
       - network
       - network-bind
 parts:
+  package-mysql-shell:
+    plugin: dump
+    source: https://downloads.mysql.com/archives/get/p/43/file/mysql-shell-8.0.32-linux-glibc2.12-x86-64bit.tar.gz
+    organize:
+      bin: usr/bin
+      libexec: usr/libexec
+      lib: usr/lib
+      share: usr/share
   packages-deb:
     plugin: nil
     stage-packages:
       - mysql-server
       - mysql-router
-      - mysql-shell
       - percona-xtrabackup-80
       - util-linux
   wrapper:
