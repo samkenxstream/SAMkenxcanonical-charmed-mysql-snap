@@ -20,6 +20,13 @@ package-repositories:
       - main
     suites:
       - jammy
+    key-id: 630239CC130E1A7FD81A27B140976EAF437D05B5
+    url: http://security.ubuntu.com/ubuntu/
+  - type: apt
+    components:
+      - main
+    suites:
+      - jammy
     key-id: 4D1BB29D63D98E422B2113B19334A25F8507EFA5
     url: http://repo.percona.com/percona/apt
 
@@ -98,6 +105,12 @@ apps:
       - network
       - network-bind
 parts:
+  pin-mysql-apt:
+    plugin: nil
+    override-pull: |
+      printf "Package: mysql-server\nPin: version 8.0.32*\nPin-Priority: 1001\n" > /etc/apt/preferences.d/mysql
+      printf "\nPackage: mysql-router\nPin: version 8.0.32*\nPin-Priority: 1001\n" >> /etc/apt/preferences.d/mysql
+      printf "\nPackage: percona-xtrabackup-80\nPin: version 8.0.32*\nPin-Priority: 1001\n" >> /etc/apt/preferences.d/mysql
   package-mysql-shell:
     plugin: dump
     # yamllint disable-line rule:line-length
@@ -114,6 +127,8 @@ parts:
       - mysql-router
       - percona-xtrabackup-80
       - util-linux
+    after:
+      - pin-mysql-apt
   wrapper:
     plugin: dump
     source: snap/local
