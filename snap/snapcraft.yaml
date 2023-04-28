@@ -108,7 +108,7 @@ parts:
   pin-mysql-apt:
     plugin: nil
     override-pull: |
-      printf "Package: mysql-server\nPin: version 8.0.32*\nPin-Priority: 1001\n" > /etc/apt/preferences.d/mysql
+      printf "Package: mysql-server-8.0\nPin: version 8.0.32*\nPin-Priority: 1001\n" > /etc/apt/preferences.d/mysql
       printf "\nPackage: mysql-router\nPin: version 8.0.32*\nPin-Priority: 1001\n" >> /etc/apt/preferences.d/mysql
       printf "\nPackage: percona-xtrabackup-80\nPin: version 8.0.32*\nPin-Priority: 1001\n" >> /etc/apt/preferences.d/mysql
   package-mysql-shell:
@@ -122,7 +122,7 @@ parts:
   packages-deb:
     plugin: nil
     stage-packages:
-      - mysql-server
+      - mysql-server-8.0
       - mysql-router
       - percona-xtrabackup-80
       - util-linux
